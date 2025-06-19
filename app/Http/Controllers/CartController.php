@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Cart\ClearAction;
 use App\Actions\Cart\GetAction;
 use App\Actions\Cart\StoreAction;
 use App\Actions\Cart\UpdateAction;
@@ -44,6 +45,15 @@ class CartController extends Controller
             request('quantity'),
             request('price'),
         );
+
+        return response()->json([
+            'cart' => app(GetAction::class)->handle()
+        ]);
+    }
+
+    public function clear()
+    {
+        app(ClearAction::class)->handle();
 
         return response()->json([
             'cart' => app(GetAction::class)->handle()
