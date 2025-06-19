@@ -18,9 +18,7 @@ class CartController extends Controller
      */
     public function cart()
     {
-        return response()->json([
-            'cart' => app(GetAction::class)->handle()
-        ]);
+        return response()->json(app(GetAction::class)->handle());
     }
 
     public function store(StoreCartRequest $request)

@@ -16,7 +16,8 @@ class StoreAction
         $cartItem = [
             'product_name' => $productName,
             'quantity' => $quantity,
-            'price' => $price
+            'price' => $price,
+            'created_at' => now(),
         ];
 
         $existingCart = [];
