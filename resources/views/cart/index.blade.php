@@ -2,6 +2,7 @@
 @section('content')
 <div class="card p-4 w-200" style="max-width: 800px;">
     <h4 class="text-center mb-4">Product Entry Form</h4>
+    <small class="text-center">Watch Demo <a href="https://www.loom.com/share/461f867d4599400da31adc5dd03ac969" target=="_blank">here</a></small>
     @include('partials.form')
 
     <template v-if="form.id === ''">
@@ -32,7 +33,6 @@
                         await axios.post('/store', form.value)
                         Swal.fire({
                             title: 'Product successfully added to cart!',
-                            text: 'Do you want to continue',
                             icon: 'success',
                         })
 
