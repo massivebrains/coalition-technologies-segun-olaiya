@@ -4,8 +4,11 @@
     <h4 class="text-center mb-4">Product Entry Form</h4>
     @include('partials.form')
 
-    <h4 class="text-center mt-4">Cart</h4>
-    @include('partials.table')
+    <template v-if="form.id === ''">
+        <h4 class="text-center mt-4">Cart</h4>
+        @include('partials.table')
+    </template>
+
 </div>
 @endsection
 
@@ -16,6 +19,7 @@
         createApp({
             setup() {
                 const form = ref({
+                    id: '',
                     product_name: '',
                     quantity: 1,
                     price: ''
@@ -70,6 +74,35 @@
                     return date.toLocaleString('en-US', options)
                 }
 
+                const editForm = async (item) => {
+                    form.value.id = item.id
+                    form.value.product_name = item.product_name
+                    form.value.quantity = item.quantity
+                    form.value.price = item.price
+                }
+
+                const saveForm = async () => {
+                    try {
+                        await axios.post('/update', form.value)
+                        Swal.fire({
+                            title: 'Product successfully saved in cart!',
+                            icon: 'success',
+                        })
+
+                        form.value.id = ''
+                        form.value.product_name = ''
+                        form.value.quantity = 1
+                        form.value.price = ''
+                        fetchCart()
+                    } catch (error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: error?.response?.data?.message || error.message,
+                            icon: 'error',
+                        })
+                    }
+                }
+
                 onMounted(() => fetchCart())
 
                 return {
@@ -77,7 +110,9 @@
                     cart,
                     total,
                     submitForm,
-                    formatDate
+                    formatDate,
+                    editForm,
+                    saveForm
                 }
             }
         }).mount('#app')

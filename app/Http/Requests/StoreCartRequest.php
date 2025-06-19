@@ -8,6 +8,11 @@ class StoreCartRequest extends FormRequest
 {
     public function rules(): array
     {
+        return self::storeRules();
+    }
+
+    public static function storeRules(): array
+    {
         return [
             'product_name' => 'required',
             'quantity' => 'required|integer|min:1',

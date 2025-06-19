@@ -3,6 +3,7 @@
 namespace App\Actions\Cart;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class StoreAction
 {
@@ -14,6 +15,7 @@ class StoreAction
     public function handle(string $productName, int $quantity, float $price): array
     {
         $cartItem = [
+            'id' => Str::uuid()->toString(),
             'product_name' => $productName,
             'quantity' => $quantity,
             'price' => $price,

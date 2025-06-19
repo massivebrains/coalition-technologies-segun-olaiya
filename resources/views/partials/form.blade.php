@@ -11,5 +11,6 @@
         <label for="price">Price per item ($)</label>
         <input type="number" class="form-control" placeholder="Enter price" step="0.01" v-model="form.price">
     </div>
-    <button type="button" class="btn btn-primary btn-block" @click="submitForm">Submit</button>
+    <button type="button" class="btn btn-primary btn-block" @click="submitForm" v-if="form.id === ''">Submit</button>
+    <button type="button" class="btn btn-info btn-block" v-else @click="saveForm">Save</button>
 </form>
