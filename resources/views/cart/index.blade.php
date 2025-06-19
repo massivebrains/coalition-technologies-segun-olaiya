@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="card p-4 w-100" style="max-width: 400px;">
+<div class="card p-4 w-200" style="max-width: 800px;">
     <h4 class="text-center mb-4">Product Entry Form</h4>
     @include('partials.form')
 
@@ -15,26 +15,26 @@
 
         createApp({
             setup() {
-                const defaults = {
+                const form = ref({
                     product_name: '',
                     quantity: 1,
                     price: ''
-                }
-
-                const form = ref(defaults)
+                })
                 const cart = ref([])
+                const total = ref(0)
 
                 const submitForm = async () => {
                     try {
-                        console.log('>>>', form.value)
-                        const response = await axios.post('/store', form.value)
-                        console.log('>>>', response)
+                        await axios.post('/store', form.value)
                         Swal.fire({
                             title: 'Product successfully added to cart!',
                             text: 'Do you want to continue',
                             icon: 'success',
                         })
-                        form.value = defaults
+
+                        form.value.product_name = ''
+                        form.value.quantity = 1
+                        form.value.price = ''
                         fetchCart()
                     } catch (error) {
                         Swal.fire({
@@ -49,10 +49,25 @@
                     try {
                         const response = await axios.get('/cart')
                         cart.value = response.data.cart
-                        console.log('>>>>', response.data.cart)
+                        total.value = response.data.total
                     } catch (error) {
 
                     }
+                }
+
+                const formatDate = (isoString) => {
+                    const date = new Date(isoString)
+
+                    const options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                    }
+
+                    return date.toLocaleString('en-US', options)
                 }
 
                 onMounted(() => fetchCart())
@@ -60,7 +75,9 @@
                 return {
                     form,
                     cart,
-                    submitForm
+                    total,
+                    submitForm,
+                    formatDate
                 }
             }
         }).mount('#app')
